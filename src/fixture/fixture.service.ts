@@ -13,6 +13,7 @@ import { Match } from '~/fixture/schemas/match.schema'
 import { PlayerRole } from '~/player'
 import { PlayerService } from '~/player/player.service'
 import { SquadService } from '~/squad/squad.service'
+import { UserService } from '~/user/user.service'
 
 @Injectable()
 export class FixtureService {
@@ -20,6 +21,7 @@ export class FixtureService {
     @InjectModel(Fixture.name) private model: Model<FixtureDocument>,
     private readonly playerService: PlayerService,
     private readonly squadService: SquadService,
+    private readonly userService: UserService,
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
@@ -31,7 +33,10 @@ export class FixtureService {
     return await this.model.findById(id)
   }
 
-  async create(createFixtureDto: CreateFixtureDto): Promise<Fixture> {
+  async create(
+    createFixtureDto: CreateFixtureDto,
+    userId: string,
+  ): Promise<Fixture> {
     let result: Fixture
     const { numberOfTeams, goalkeeperIds, outfieldIds } = createFixtureDto
     const session = await this.connection.startSession()
@@ -62,7 +67,9 @@ export class FixtureService {
         outfieldIds.includes(player._id.toString()),
       )
       const fixture = new this.model()
+      const owner = await this.userService.getById(userId)
 
+      fixture.createdBy = owner
       fixture.teams = await this.squadService.createMany(
         this.squadService.drawTeams(goalkeepers, outfield),
       )

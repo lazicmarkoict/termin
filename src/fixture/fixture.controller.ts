@@ -5,10 +5,13 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { RequestWithUser } from '~/auth/dtos'
+import { FixtureOwnerGuard } from '~/auth/guards/fixture-owner.guard'
 import { JwtAuthenticationGuard } from '~/auth/guards/jwt-authentication.guard'
 import { ParamsWithId } from '~/common'
 import { AddMatchDto, CreateFixtureDto, FixtureStatusEnum } from '~/fixture'
@@ -40,8 +43,11 @@ export class FixtureController {
     description: 'Successfully created fixture.',
     type: Fixture,
   })
-  async create(@Body() fixture: CreateFixtureDto): Promise<Fixture> {
-    return await this.service.create(fixture)
+  async create(
+    @Req() request: RequestWithUser,
+    @Body() fixture: CreateFixtureDto,
+  ): Promise<Fixture> {
+    return await this.service.create(fixture, request.user._id)
   }
 
   @Get('/:id')
@@ -55,6 +61,7 @@ export class FixtureController {
     return await this.service.findOne(id)
   }
 
+  @UseGuards(FixtureOwnerGuard)
   @Patch('/:id/end')
   @ApiOperation({
     summary: `Updates fixture status to ${FixtureStatusEnum.ENDED} and processes matches.`,
@@ -68,6 +75,7 @@ export class FixtureController {
     return await this.service.end(id)
   }
 
+  @UseGuards(FixtureOwnerGuard)
   @Patch('/:id/add-match')
   @ApiOperation({ summary: 'Adds a match to the list.' })
   @ApiResponse({

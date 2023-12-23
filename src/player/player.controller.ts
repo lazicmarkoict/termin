@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { Role } from '~/auth/enums'
+import { RoleGuard } from '~/auth/guards/role.guard'
 import { ParamsWithId } from '~/common'
 import { CreatePlayerDto } from '~/player'
 import { Player } from '~/player/schemas/player.schema'
@@ -23,6 +25,7 @@ export class PlayerController {
     return await this.service.findAll()
   }
 
+  @UseGuards(RoleGuard(Role.ADMIN))
   @Post()
   @ApiOperation({ summary: 'Create a player.' })
   @ApiResponse({

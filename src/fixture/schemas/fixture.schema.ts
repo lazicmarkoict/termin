@@ -7,6 +7,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { FixtureStatusEnum } from '~/fixture'
 import { Match, MatchSchema } from '~/fixture/schemas/match.schema'
 import { Squad, SquadSchema } from '~/squad/schemas/squad.schema'
+import { User, UserSchema } from '~/user/schemas/user.schema'
 
 export type FixtureDocument = mongoose.HydratedDocument<Fixture>
 
@@ -27,6 +28,11 @@ export class Fixture {
   @ApiProperty({ enum: FixtureStatusEnum })
   @Prop({ default: FixtureStatusEnum.CREATED })
   status: FixtureStatusEnum
+
+  @ApiProperty({ type: User })
+  @Prop({ type: UserSchema, autopopulate: true })
+  @Type(() => User)
+  createdBy: User
 }
 
 export const FixtureSchema = SchemaFactory.createForClass(Fixture)

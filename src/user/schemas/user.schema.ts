@@ -3,6 +3,8 @@ import * as mongoose from 'mongoose'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { ApiProperty } from '@nestjs/swagger'
 
+import { Role } from '~/auth/enums'
+
 export type UserDocument = mongoose.HydratedDocument<User>
 
 @Schema({
@@ -16,6 +18,10 @@ export class User extends mongoose.Document {
   @ApiProperty()
   @Prop()
   password: string
+
+  @ApiProperty({ enum: User })
+  @Prop({ default: [Role.USER] })
+  roles: Role[]
 
   @ApiProperty()
   @Prop({ default: null })
