@@ -4,9 +4,11 @@ import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { AuthModule } from './auth/auth.module'
 import { FixtureModule } from './fixture/fixture.module'
 import { PlayerModule } from './player/player.module'
 import { SquadModule } from './squad/squad.module'
+import { UserModule } from './user/user.module'
 
 @Module({
   imports: [
@@ -18,6 +20,10 @@ import { SquadModule } from './squad/squad.module'
         MONGO_PASSWORD: Joi.string().required(),
         MONGO_DATABASE: Joi.string().required(),
         MONGO_HOST: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME_IN_SECONDS: Joi.string().required(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME_IN_SECONDS: Joi.string().required(),
       }),
     }),
     MongooseModule.forRootAsync({
@@ -37,6 +43,8 @@ import { SquadModule } from './squad/squad.module'
     PlayerModule,
     FixtureModule,
     SquadModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}

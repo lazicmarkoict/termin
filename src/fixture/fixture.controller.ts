@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { JwtAuthenticationGuard } from '~/auth/guards/jwt-authentication.guard'
 import { ParamsWithId } from '~/common'
 import { AddMatchDto, CreateFixtureDto, FixtureStatusEnum } from '~/fixture'
 import { Fixture } from '~/fixture/schemas/fixture.schema'
@@ -23,6 +32,7 @@ export class FixtureController {
     return await this.service.findAll()
   }
 
+  @UseGuards(JwtAuthenticationGuard)
   @Post()
   @ApiOperation({ summary: 'Create a fixture.' })
   @ApiResponse({

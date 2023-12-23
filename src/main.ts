@@ -1,3 +1,4 @@
+import * as cookieParser from 'cookie-parser'
 import * as morgan from 'morgan'
 import 'reflect-metadata'
 
@@ -18,6 +19,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config)
 
   SwaggerModule.setup('docs', app, document)
+  app.use(cookieParser())
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
