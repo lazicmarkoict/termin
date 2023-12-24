@@ -30,7 +30,6 @@ export class PlayerController {
     isArray: true,
   })
   async findAll(@Query() query: OffsetPaginationDto): Promise<Player[]> {
-    console.log('kveri je', query)
     return await this.service.findAll(query.page, query.limit)
   }
 
