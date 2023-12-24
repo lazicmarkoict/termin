@@ -10,7 +10,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common'
-import { ApiBody } from '@nestjs/swagger'
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 import { AuthService } from '~/auth/auth.service'
 import { RegisterDto, RequestWithUser } from '~/auth/dtos'
@@ -29,12 +29,25 @@ export class AuthController {
 
   @UseGuards(JwtAuthenticationGuard)
   @Get()
-  authenticate(@Req() request: RequestWithUser) {
+  @ApiOperation({ summary: 'Verifies current JWT token.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully returned current user data.',
+    type: User,
+  })
+  authenticate(@Req() request: RequestWithUser): User {
     return request.user
   }
 
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
+  @ApiOperation({ summary: 'Login with refresh token.' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Successfully replaced expired access token with new one and returns user.',
+    type: User,
+  })
   refresh(@Req() request: RequestWithUser) {
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(
       request.user._id,
@@ -46,6 +59,12 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiOperation({ summary: 'Register as a new user.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully created new user.',
+    type: User,
+  })
   async register(@Body() registerDto: RegisterDto): Promise<User> {
     return await this.authService.register(registerDto)
   }
@@ -54,6 +73,13 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @ApiBody({
+    type: User,
+  })
+  @ApiOperation({ summary: 'Login with access token.' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Successfully sets access and refresh token cookies and returns user.',
     type: User,
   })
   async logIn(
@@ -76,6 +102,12 @@ export class AuthController {
   @UseGuards(JwtAuthenticationGuard)
   @Post('logout')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Log out from app.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully resets access and refresh token cookies.',
+    type: User,
+  })
   async logOut(@Req() request: RequestWithUser): Promise<void> {
     await this.userService.removeRefreshToken(request.user._id)
 
