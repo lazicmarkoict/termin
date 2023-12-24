@@ -13,10 +13,10 @@ import {
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 import { AuthService } from '~/auth/auth.service'
-import { RegisterDto, RequestWithUser } from '~/auth/dtos'
 import { JwtAuthenticationGuard } from '~/auth/guards/jwt-authentication.guard'
 import { JwtRefreshGuard } from '~/auth/guards/jwt-refresh.guard'
 import { LocalAuthenticationGuard } from '~/auth/guards/local-authentication.guard'
+import { RegisterDto, RequestWithUser } from '~/auth/types'
 import { User } from '~/user/schemas/user.schema'
 import { UserService } from '~/user/user.service'
 

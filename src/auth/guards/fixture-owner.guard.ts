@@ -1,8 +1,8 @@
 import { ExecutionContext, Injectable } from '@nestjs/common'
 
-import { RequestWithUser } from '~/auth/dtos'
 import { Role } from '~/auth/enums'
 import { JwtAuthenticationGuard } from '~/auth/guards/jwt-authentication.guard'
+import { RequestWithUser } from '~/auth/types'
 import { FixtureService } from '~/fixture/fixture.service'
 
 @Injectable()

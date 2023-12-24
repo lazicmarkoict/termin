@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Type, mixin } from '@nestjs/common'
 
-import { RequestWithUser } from '~/auth/dtos'
 import { Role } from '~/auth/enums'
 import { JwtAuthenticationGuard } from '~/auth/guards/jwt-authentication.guard'
+import { RequestWithUser } from '~/auth/types'
 
 export const RoleGuard = (role: Role): Type<CanActivate> => {
   class RoleGuardMixin extends JwtAuthenticationGuard {

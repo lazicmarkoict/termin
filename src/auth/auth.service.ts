@@ -8,8 +8,8 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
-import { RegisterDto, TokenPayload } from '~/auth/dtos'
 import { MongoErrorCode } from '~/auth/enums'
+import { RegisterDto, TokenPayload } from '~/auth/types'
 import { User } from '~/user/schemas/user.schema'
 import { UserService } from '~/user/user.service'
 

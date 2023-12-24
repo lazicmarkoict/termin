@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
-import { RequestWithUser } from '~/auth/dtos'
 import { Role } from '~/auth/enums'
 import { FixtureOwnerGuard } from '~/auth/guards/fixture-owner.guard'
 import { RoleGuard } from '~/auth/guards/role.guard'
+import { RequestWithUser } from '~/auth/types'
 import { ParamsWithId } from '~/common'
 import { AddMatchDto, CreateFixtureDto, FixtureStatusEnum } from '~/fixture'
 import { Fixture } from '~/fixture/schemas/fixture.schema'

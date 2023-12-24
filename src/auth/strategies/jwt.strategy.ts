@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 
-import { TokenPayload } from '~/auth/dtos'
+import { TokenPayload } from '~/auth/types'
 import { User } from '~/user/schemas/user.schema'
 import { UserService } from '~/user/user.service'
 
