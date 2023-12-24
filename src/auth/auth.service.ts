@@ -23,22 +23,19 @@ export class AuthService {
 
   async register(registrationDto: RegisterDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(registrationDto.password, 10)
+    const user = await this.userService.getByEmail(registrationDto.email)
 
-    try {
-      const createdUser = await this.userService.create({
-        ...registrationDto,
-        password: hashedPassword,
-      })
+    if (user)
+      throw new BadRequestException(
+        `User with email:${registrationDto.email} already exists.`,
+      )
 
-      return createdUser
-    } catch (error) {
-      if (error?.code === MongoErrorCode.UniqueViolation)
-        throw new BadRequestException(
-          `User with email:${registrationDto.email} already exists.`,
-        )
+    const createdUser = await this.userService.create({
+      ...registrationDto,
+      password: hashedPassword,
+    })
 
-      throw new InternalServerErrorException('Something went wrong.')
-    }
+    return createdUser
   }
 
   async getAuthenticatedUser(
@@ -46,7 +43,7 @@ export class AuthService {
     plainTextPassword: string,
   ): Promise<User> {
     try {
-      const user = await this.userService.getByEmail(email)
+      const user = await this.userService.getByEmailAndFail(email)
 
       await this.verifyPassword(plainTextPassword, user.password)
 

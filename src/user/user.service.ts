@@ -12,6 +12,10 @@ export class UserService {
   constructor(@InjectModel(User.name) readonly model: Model<UserDocument>) {}
 
   async getByEmail(email: string): Promise<User> {
+    return await this.model.findOne({ email })
+  }
+
+  async getByEmailAndFail(email: string): Promise<User> {
     const user = await this.model.findOne({ email })
 
     if (user) return user

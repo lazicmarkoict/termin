@@ -12,7 +12,7 @@ export type UserDocument = mongoose.HydratedDocument<User>
 })
 export class User extends mongoose.Document {
   @ApiProperty()
-  @Prop({ unique: true })
+  @Prop()
   email: string
 
   @ApiProperty()
@@ -34,5 +34,6 @@ UserSchema.set('toJSON', {
   transform: (_document, returnedObject) => {
     delete returnedObject.password
     delete returnedObject.currentHashedRefreshToken
+    delete returnedObject.roles
   },
 })
