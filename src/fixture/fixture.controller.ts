@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common'
@@ -14,7 +15,7 @@ import { Role } from '~/auth/enums'
 import { FixtureOwnerGuard } from '~/auth/guards/fixture-owner.guard'
 import { RoleGuard } from '~/auth/guards/role.guard'
 import { RequestWithUser } from '~/auth/types'
-import { ParamsWithId } from '~/common'
+import { KeysetPaginationDto, ParamsWithId } from '~/common'
 import { AddMatchDto, CreateFixtureDto, FixtureStatusEnum } from '~/fixture'
 import { Fixture } from '~/fixture/schemas/fixture.schema'
 
@@ -32,8 +33,8 @@ export class FixtureController {
     type: Fixture,
     isArray: true,
   })
-  async findAll(): Promise<Fixture[]> {
-    return await this.service.findAll()
+  async findAll(@Query() query: KeysetPaginationDto): Promise<Fixture[]> {
+    return await this.service.findAll(query.lastId, query.limit)
   }
 
   @UseGuards(RoleGuard(Role.ORGANIZER))

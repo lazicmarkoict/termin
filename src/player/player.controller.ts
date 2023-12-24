@@ -1,9 +1,17 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 import { Role } from '~/auth/enums'
 import { RoleGuard } from '~/auth/guards/role.guard'
-import { ParamsWithId } from '~/common'
+import { OffsetPaginationDto, ParamsWithId } from '~/common'
 import { CreatePlayerDto } from '~/player'
 import { Player } from '~/player/schemas/player.schema'
 
@@ -21,8 +29,9 @@ export class PlayerController {
     type: Player,
     isArray: true,
   })
-  async findAll(): Promise<Player[]> {
-    return await this.service.findAll()
+  async findAll(@Query() query: OffsetPaginationDto): Promise<Player[]> {
+    console.log('kveri je', query)
+    return await this.service.findAll(query.page, query.limit)
   }
 
   @UseGuards(RoleGuard(Role.ADMIN))

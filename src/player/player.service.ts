@@ -13,8 +13,10 @@ export class PlayerService {
     @InjectModel(Player.name) readonly model: Model<PlayerDocument>,
   ) {}
 
-  async findAll(): Promise<Player[]> {
-    return await this.model.find().exec()
+  async findAll(page = 1, limit = 100): Promise<Player[]> {
+    const skip = (page - 1) * limit
+
+    return await this.model.find().skip(skip).limit(limit).exec()
   }
 
   async findOne(id: string): Promise<Player> {

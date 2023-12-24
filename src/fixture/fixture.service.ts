@@ -25,8 +25,16 @@ export class FixtureService {
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
-  async findAll(): Promise<Fixture[]> {
-    return await this.model.find().exec()
+  async findAll(lastId: string, limit = 100): Promise<Fixture[]> {
+    let query = {}
+
+    if (lastId) query = { _id: { $gt: lastId } }
+
+    return await this.model
+      .find(query)
+      .limit(limit)
+      .sort({ createdAt: 1 })
+      .exec()
   }
 
   async findOne(id: string): Promise<Fixture> {
