@@ -25,3 +25,7 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Docs
+
+Swagger docs available at /docs
