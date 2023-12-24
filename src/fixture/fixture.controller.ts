@@ -11,8 +11,9 @@ import {
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 import { RequestWithUser } from '~/auth/dtos'
+import { Role } from '~/auth/enums'
 import { FixtureOwnerGuard } from '~/auth/guards/fixture-owner.guard'
-import { JwtAuthenticationGuard } from '~/auth/guards/jwt-authentication.guard'
+import { RoleGuard } from '~/auth/guards/role.guard'
 import { ParamsWithId } from '~/common'
 import { AddMatchDto, CreateFixtureDto, FixtureStatusEnum } from '~/fixture'
 import { Fixture } from '~/fixture/schemas/fixture.schema'
@@ -35,7 +36,7 @@ export class FixtureController {
     return await this.service.findAll()
   }
 
-  @UseGuards(JwtAuthenticationGuard)
+  @UseGuards(RoleGuard(Role.ORGANIZER))
   @Post()
   @ApiOperation({ summary: 'Create a fixture.' })
   @ApiResponse({

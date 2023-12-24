@@ -3,7 +3,8 @@ import { Model } from 'mongoose'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { CreatePlayerDto, MarkDto, PlayerRole } from '~/player'
+import { calculateInitialRating } from '~/common/utils'
+import { CreatePlayerDto } from '~/player'
 import { Player, PlayerDocument } from '~/player/schemas/player.schema'
 
 @Injectable()
@@ -30,10 +31,7 @@ export class PlayerService {
       name: createPlayerDto.name,
       ratings: createPlayerDto.marks.map(mark => ({
         isActive: true,
-        value: this.calculateInitialRating({
-          role: mark.role,
-          value: mark.value,
-        }),
+        value: calculateInitialRating(mark.role, mark.value),
         role: mark.role,
       })),
     })
@@ -43,14 +41,5 @@ export class PlayerService {
 
   async update(id: string, partial: Partial<Player>): Promise<Player> {
     return await this.model.findByIdAndUpdate(id, partial, { new: true })
-  }
-
-  private calculateInitialRating(mark: MarkDto): number {
-    const BASE_GK_RATING = 10000
-    const BASE_PLAYER_RATING = 1000
-
-    return mark.role === PlayerRole.OUTFIELD
-      ? BASE_PLAYER_RATING + mark.value * 400
-      : BASE_GK_RATING + mark.value * 200
   }
 }

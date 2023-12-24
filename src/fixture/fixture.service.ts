@@ -76,7 +76,7 @@ export class FixtureService {
       result = await fixture.save()
     })
 
-    session.endSession()
+    await session.endSession()
 
     return result
   }
@@ -102,7 +102,7 @@ export class FixtureService {
       result = await this.updateStatus(fixtureId)
     })
 
-    session.endSession()
+    await session.endSession()
 
     return result
   }
@@ -170,7 +170,7 @@ export class FixtureService {
         matches: [...fixture.matches, match],
       })
     })
-    session.endSession()
+    await session.endSession()
 
     return result
   }
